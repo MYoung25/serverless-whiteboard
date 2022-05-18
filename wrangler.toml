@@ -1,3 +1,17 @@
 name = "serverless-whiteboard"
 main = "src/index.ts"
 compatibility_date = "2022-05-18"
+
+kv_namespaces = [
+    { binding = "COUNTER", id = "0736197676a94bc4a22868d92d9e84bf", preview_id = "7cf80202a7a3494ea284f6b0b9dd074e" },
+    { binding = "WHITEBOARD", id = "20902dfcaeca4f19b51f606db2179e34", preview_id = "b0b7008b96764d1c9f2ad00b266a3d5d" }
+]
+
+[durable_objects]
+bindings = [
+    { name = "COUNTERDO", class_name = "Counter" }
+]
+
+[[migrations]]
+tag = "v1.0.0"
+new_classes = ["Counter"]
