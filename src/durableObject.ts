@@ -23,11 +23,12 @@ export class Counter extends Actor {
 
     constructor(state: Durable.State, env: Bindings) {
         super(state, env);
-        console.log('constructor')
         this.API = this.router()
         // NOTE: don't actually need this
         this.#wait = state.waitUntil.bind(state);
         this.storage = state.storage
+
+        console.log(Object.keys(this))
     }
 
     async setup(state: Durable.State, bindings: Bindings) {
@@ -36,15 +37,14 @@ export class Counter extends Actor {
     }
 
     receive(req: Request): Promise<Response> {
-
-        return this.connect(req)
+        console.log('receiver')
 
         return this.API.run(req, {
             waitUntil: this.#wait
         });
     }
 
-    async onconnect(req: Request, server: WebSocket) {
+    onconnect(req: Request, server: WebSocket) {
         console.log('onconnect')
         this.connections.push({ ws: server })
 
@@ -66,7 +66,10 @@ export class Counter extends Actor {
 
         API.add(`GET`, `/ws`, async (req) => {
             console.log('/ws')
-            return await this.connect(req)
+            console.log(req)
+            const x =  await this.connect(req)
+            console.log(x)
+            return x
         })
         return API
     }
