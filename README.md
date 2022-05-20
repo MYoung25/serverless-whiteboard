@@ -5,6 +5,7 @@
 - Workers -> ./src
 - Durable Objects + WebSockets -> ./src/whiteboard.ts
 - KV Store -> ./src/whiteboardModel.ts
+- cloudflared for testing on mobile
 
 ## Demo Instructions
 ### Solo Mode
