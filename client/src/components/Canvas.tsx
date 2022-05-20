@@ -1,6 +1,6 @@
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { Pane, majorScale, Heading } from "evergreen-ui";
-import { ConnectionIndicator } from "./ConnectionIndicator";
+// import { ConnectionIndicator } from "./ConnectionIndicator";
 
 import { useServices } from "../services";
 
@@ -28,7 +28,7 @@ export function Canvas({ whiteboardId }: { whiteboardId: string }) {
     return (
         <Pane>
             <Pane marginBottom={majorScale(3)}>
-                <Heading align='center' marginTop={majorScale(3)} marginBottom={majorScale(1)}>Color Palette</Heading>
+                <Heading marginTop={majorScale(3)} marginBottom={majorScale(1)}>Color Palette</Heading>
                 <Pane display={'flex'}>
                     {
                         palette.map(color => (
@@ -51,7 +51,7 @@ export function Canvas({ whiteboardId }: { whiteboardId: string }) {
                     ref={canvasRef}
                 />
             </Pane>
-            <ConnectionIndicator whiteboardId={whiteboardId} />
+            {/* <ConnectionIndicator whiteboardId={whiteboardId} /> */}
         </Pane>
     );
 }
