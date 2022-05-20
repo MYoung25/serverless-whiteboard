@@ -63,15 +63,21 @@ export class CanvasService {
                     try {
                         const event = JSON.parse(message.data)
                         console.log(event);
-                        if (event.type === 'whiteboard/LOADED') {
-                            if (event.data.length === 0 && this.ctx) {
-                                this.ctx.clearRect(0, 0, this.w, this.h)
-                                return
-                            }
 
-                            event.data.forEach((object: drawObject) => {
-                                this.draw(object, true)
-                            })
+                        switch (event.type) {
+                            case 'whiteboard/LOADED':
+                                if (event.data.length === 0 && this.ctx) {
+                                    this.ctx.clearRect(0, 0, this.w, this.h)
+                                    return
+                                }
+        
+                                event.data.forEach((object: drawObject) => {
+                                    this.draw(object, true)
+                                })
+                                break;
+                            case 'whiteboard/UPDATED':
+                                this.draw(event.data, true)
+                                break;
                         }
                     } catch (e) {
                         console.error(e)
