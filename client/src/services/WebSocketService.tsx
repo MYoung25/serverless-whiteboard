@@ -17,10 +17,11 @@ export class WebsocketService {
 
         this.ws = new ReconnectingWebsocket(`${WEBSOCKET_URL}/whiteboard/${id}/ws`)
 
+        this.ws.addEventListener('open', () => {})
     }
 
     registerListeners (listeners?: Listeners[]) {
-        console.log('registering listeners...')
+        console.log('registering listeners...', this.ws)
         if (!this.ws) return
         
         listeners?.forEach((listener: Listeners) => {
