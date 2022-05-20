@@ -5,6 +5,9 @@ export interface Listeners {
     handler: (message: MessageEvent) => void | Promise<void>
 }
 
+// @ts-ignore
+const WEBSOCKET_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL
+
 export class WebsocketService {
 
     ws?: ReconnectingWebsocket
@@ -12,7 +15,7 @@ export class WebsocketService {
     init (id: string) {
         if (this.ws) return
 
-        this.ws = new ReconnectingWebsocket(`ws://localhost:8787/whiteboard/${id}/ws`)
+        this.ws = new ReconnectingWebsocket(`${WEBSOCKET_URL}/whiteboard/${id}/ws`)
 
     }
 
