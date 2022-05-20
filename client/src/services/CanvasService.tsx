@@ -43,6 +43,7 @@ export class CanvasService {
 
         const findxy = this.findxy.bind(this)
 
+        /** Cursor Events */
         this.canvas.addEventListener("mousemove", function (e) {
             findxy('move', e)
         }, false)
@@ -55,6 +56,15 @@ export class CanvasService {
         this.canvas.addEventListener("mouseout", function (e) {
             findxy('out', e)
         }, false);
+
+        /** Touch Events */
+        this.canvas.addEventListener("touchmove", function (e) {
+            findxy('move', e)
+        }, false)
+        this.canvas.addEventListener("touchstart", function (e) {
+            findxy('down', e)
+        }, false);
+
 
         this.websocketService.addListeners([
             {
@@ -93,13 +103,25 @@ export class CanvasService {
         ])
     }
 
-    findxy(res: string, e: MouseEvent) {
+    findxy(res: string, e: MouseEvent | TouchEvent) {
         if (!this.canvas || !this.ctx) return
+
+        let clientX, clientY
+        if (e.type.includes('touch')) {
+            const touchEvent = e as TouchEvent
+            if (touchEvent.touches.length === 0) return
+            clientX = touchEvent.touches[0].clientX
+            clientY = touchEvent.touches[0].clientY
+        } else {
+            clientX = (e as MouseEvent).clientX
+            clientY = (e as MouseEvent).clientY
+        }
+
         if (res == 'down') {
             this.prevX = this.currX;
             this.prevY = this.currY;
-            this.currX = e.clientX - this.canvas.getBoundingClientRect().left;
-            this.currY = e.clientY - this.canvas.getBoundingClientRect().top;
+            this.currX = clientX - this.canvas.getBoundingClientRect().left;
+            this.currY = clientY - this.canvas.getBoundingClientRect().top;
 
             this.flag = true;
             this.dot_flag = true;
@@ -118,8 +140,8 @@ export class CanvasService {
             if (this.flag) {
                 this.prevX = this.currX;
                 this.prevY = this.currY;
-                this.currX = e.clientX - this.canvas.getBoundingClientRect().left;
-                this.currY = e.clientY - this.canvas.getBoundingClientRect().top;
+                this.currX = clientX - this.canvas.getBoundingClientRect().left;
+                this.currY = clientY - this.canvas.getBoundingClientRect().top;
 
                 const drawObject = {
                     moveTo: {

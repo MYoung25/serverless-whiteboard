@@ -61,9 +61,10 @@ export function Canvas({ whiteboardId = '' }: { whiteboardId: string }) {
                 </Pane>
             </Pane>
 
-            <Pane elevation={3} width={375} height={300} backgroundColor="white">
+            <Pane elevation={3} width={375} height={300} backgroundColor="white" >
                 <canvas
                     ref={canvasRef}
+                    style={{touchAction:"none"}}
                 />
             </Pane>
             <ConnectionIndicator whiteboardId={whiteboardId} />
