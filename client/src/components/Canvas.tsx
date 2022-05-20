@@ -23,7 +23,7 @@ export function Canvas({ whiteboardId }: { whiteboardId: string }) {
             CanvasService.init(canvasRef.current);
             WebsocketService.init(whiteboardId);
         }
-    }, [canvasRef.current, whiteboardId])
+    }, [canvasRef.current, whiteboardId, CanvasService, WebsocketService]);
 
     return (
         <Pane>
