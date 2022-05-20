@@ -81,6 +81,7 @@ export class CanvasService {
             {
                 eventName: 'open',
                 handler: () => {
+                    console.log('load!')
                     this.websocketService.emit({ type: 'load' })
                 }
             },
