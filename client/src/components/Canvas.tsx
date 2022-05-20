@@ -14,7 +14,7 @@ const palette: string[] = [
         "white",
 ]
 
-export function Canvas({ whiteboardId }: { whiteboardId: string }) {
+export function Canvas({ whiteboardId = '' }: { whiteboardId: string }) {
     const { CanvasService, WebsocketService } = useServices();
     const canvasRef = useRef(null);
 
@@ -23,7 +23,7 @@ export function Canvas({ whiteboardId }: { whiteboardId: string }) {
             CanvasService.init(canvasRef.current);
             WebsocketService.init(whiteboardId);
         }
-    }, [canvasRef.current, whiteboardId, CanvasService, WebsocketService]);
+    }, [whiteboardId, CanvasService, WebsocketService]);
 
     return (
         <Pane>

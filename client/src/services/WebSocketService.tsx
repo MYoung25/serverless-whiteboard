@@ -20,9 +20,11 @@ export class WebsocketService {
     }
 
     registerListeners (listeners?: Listeners[]) {
+        console.log('registering listeners...')
         if (!this.ws) return
-
+        
         listeners?.forEach((listener: Listeners) => {
+            console.log('registering listener...', listener.eventName)
             this.ws.addEventListener(listener.eventName, listener.handler)
         })
 
