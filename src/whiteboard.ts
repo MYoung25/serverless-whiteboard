@@ -21,7 +21,7 @@ export interface drawObject {
     lineWidth: number
 }
 
-function replyWS(socket: WebSocket, type: string, data: drawObject[]) {
+function replyWS(socket: WebSocket, type: string, data: drawObject | drawObject[]) {
     let message = JSON.stringify({ type, data })
     socket.send(message)
 }
@@ -88,7 +88,7 @@ export class Whiteboard extends Actor {
         return API
     }
 
-    broadcast(event: string, emitter?: WebSocket) {
+    broadcast(event: string, data: drawObject | undefined , emitter?: WebSocket) {
         this.connections
             .filter(({ ws }: {ws: WebSocket}) => {
                 if (!emitter) return true
@@ -96,7 +96,7 @@ export class Whiteboard extends Actor {
             })
             .forEach((client) => {
                 try {
-                    replyWS(client.ws, event, this.whiteboardPaths)
+                    replyWS(client.ws, event, data || this.whiteboardPaths)
                 } catch (err) { }
             })
     }
@@ -109,7 +109,7 @@ export class Whiteboard extends Actor {
                 case 'addPath':
                     this.whiteboardPaths.push(event.data)
                     void this.storage.put('whiteboardPaths', this.whiteboardPaths)
-                    this.broadcast(`whiteboard/UPDATED`, server)
+                    this.broadcast(`whiteboard/UPDATED`, event.data, server)
                     break
                 case 'load':
                     replyWS(server, `whiteboard/LOADED`, this.whiteboardPaths)
