@@ -15,6 +15,7 @@ export class WebsocketService {
     init (id: string) {
         if (this.ws) return
 
+        console.log('initializing websocket...')
         this.ws = new ReconnectingWebsocket(`${WEBSOCKET_URL}/whiteboard/${id}/ws`)
 
         this.ws.addEventListener('open', () => {})
