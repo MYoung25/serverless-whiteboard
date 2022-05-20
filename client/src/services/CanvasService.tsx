@@ -56,7 +56,7 @@ export class CanvasService {
             findxy('out', e)
         }, false);
 
-        this.websocketService.registerListeners([
+        this.websocketService.addListeners([
             {
                 eventName: 'message',
                 handler: (message: MessageEvent) => {

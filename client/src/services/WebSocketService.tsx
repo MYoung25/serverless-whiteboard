@@ -11,6 +11,7 @@ const WEBSOCKET_URL = process.env.NEXT_PUBLIC_WEBSOCKET_URL
 export class WebsocketService {
 
     ws?: ReconnectingWebsocket
+    listeners: Listeners[] = []
     
     init (id: string) {
         if (this.ws) return
@@ -18,11 +19,12 @@ export class WebsocketService {
         console.log('initializing websocket...')
         this.ws = new ReconnectingWebsocket(`${WEBSOCKET_URL}/whiteboard/${id}/ws`)
 
-        this.ws.addEventListener('open', () => {})
+        this.ws.addEventListener('open', () => {
+            this.registerListeners(this.listeners)
+        })
     }
 
     registerListeners (listeners?: Listeners[]) {
-        console.log('registering listeners...', this.ws)
         if (!this.ws) return
         
         listeners?.forEach((listener: Listeners) => {
@@ -31,6 +33,15 @@ export class WebsocketService {
         })
 
     }
+    
+    addListeners (listeners: Listeners[]) {
+        if (!this.ws) {
+            this.listeners = listeners
+        } else {
+            this.registerListeners(listeners)
+        }
+    }
+
 
     emit (data: { type: string, data?: string | object }) {
         if (!this.ws) return
