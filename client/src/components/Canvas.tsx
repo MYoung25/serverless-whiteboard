@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { Pane, majorScale, Heading } from "evergreen-ui";
-// import { ConnectionIndicator } from "./ConnectionIndicator";
+import { ConnectionIndicator } from "./ConnectionIndicator";
 
 import { useServices } from "../services";
 
@@ -51,7 +51,7 @@ export function Canvas({ whiteboardId }: { whiteboardId: string }) {
                     ref={canvasRef}
                 />
             </Pane>
-            {/* <ConnectionIndicator whiteboardId={whiteboardId} /> */}
+            <ConnectionIndicator whiteboardId={whiteboardId} />
         </Pane>
     );
 }
