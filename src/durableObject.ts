@@ -71,31 +71,33 @@ export class Counter extends Actor {
         })
     }
 
-    handleMessage = async (e) => {
+    handleMessage = (e: MessageEvent) => {
+        console.log(e.data)
         try {
             const event = JSON.parse(e.data)
+            console.log(event.data)
 
             switch (event.type) {
                 case 'increment':
-                    await this.storage.put('count', ++this.count)
+                    void this.storage.put('count', ++this.count)
                     break
 
                 case 'decrement':
-                    await this.storage.put('count', --this.count)
+                    void this.storage.put('count', --this.count)
                     break
 
                 default:
                     break
             }
 
-            this.broadcast()
+            // this.broadcast()
         } catch (err) {
-            console.error(err)
+            console.log(err)
         }
     }
 
     handleCloseOrError = (e) => {
-        console.log('handleCloseError', e)
+        console.log('handle close or errors', e)
         this.connections = this.connections.filter(({ ws }) => ws !== e.target)
     }
 }

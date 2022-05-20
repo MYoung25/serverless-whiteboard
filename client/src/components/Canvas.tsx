@@ -1,5 +1,6 @@
 import { useRef, useEffect } from "react";
-import { Pane, majorScale } from "evergreen-ui";
+import { Pane, majorScale, Heading } from "evergreen-ui";
+import { ConnectionIndicator } from "./ConnectionIndicator";
 
 import { useServices } from "../services";
 
@@ -13,38 +14,42 @@ const palette: string[] = [
         "white",
 ]
 
-export function Canvas() {
-    const { CanvasService } = useServices();
+export function Canvas({ whiteboardId }: { whiteboardId: string }) {
+    const { CanvasService, WebsocketService } = useServices();
     const canvasRef = useRef(null);
-    
+
     useEffect(() => {
         CanvasService.init(canvasRef.current);
-    }, [canvasRef.current])
+        WebsocketService.init(whiteboardId);
+    }, [canvasRef.current, whiteboardId])
 
     return (
         <>
+            <Pane marginBottom={majorScale(3)}>
+                <Heading align='center' marginTop={majorScale(3)} marginBottom={majorScale(1)}>Color Palette</Heading>
+                <Pane display={'flex'}>
+                    {
+                        palette.map(color => (
+                            <Pane
+                                key={color}
+                                marginRight={majorScale(1)}
+                                flex={1} 
+                                onClick={() => CanvasService.setColor(color)}
+                                backgroundColor={color}
+                                height={majorScale(5)}
+                                border='1px solid black'
+                            />
+                        ))
+                    }
+                </Pane>
+            </Pane>
+
             <Pane elevation={3} width={375} height={300}>
                 <canvas
                     ref={canvasRef}
                 />
             </Pane>
-
-            <Pane display={'flex'} marginTop={majorScale(3)}>
-                {
-                    palette.map(color => (
-                        <Pane
-                            key={color}
-                            marginRight={majorScale(1)}
-                            flex={1} 
-                            onClick={() => CanvasService.color(color)}
-                            style={{ backgroundColor: color }}
-                        >
-                            {color}
-                        </Pane>
-                    ))
-                }
-                
-            </Pane>
+            <ConnectionIndicator whiteboardId={whiteboardId} />
         </>
     );
 }

@@ -6,6 +6,8 @@ export interface Context extends worktop.Context {
 	bindings: {
 		COUNTER: KV.Namespace;
         COUNTERDO: Durable.Namespace;
+        WHITEBOARD: KV.Namespace
+        WHITEBOARDDO: Durable.Namespace
 	};
 }
 

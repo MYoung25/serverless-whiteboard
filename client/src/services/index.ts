@@ -1,7 +1,12 @@
-import { CanvasService } from "./canvasService"
+import { CanvasService as cs } from "./CanvasService"
+import { WebsocketService as wss } from "./WebSocketService"
 
-const services = {
-    CanvasService: new CanvasService()
+const WebsocketService = new wss()
+const CanvasService = new cs(WebsocketService)
+
+export const services = {
+    WebsocketService,
+    CanvasService,
 }
 
 export function useServices () {

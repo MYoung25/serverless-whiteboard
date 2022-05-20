@@ -1,12 +1,24 @@
-import { useState } from 'react'
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import { Pane, Heading, TextInput, Button } from 'evergreen-ui'
-import { Canvas } from '../components/Canvas'
+import { useState } from "react";
+import type { NextPage } from "next";
+import Head from "next/head";
+import { Pane, Heading, TextInput, Button, majorScale, toaster } from "evergreen-ui";
+import { Canvas } from "../components/Canvas";
 
 const Home: NextPage = () => {
-    const [whiteboardInput, setWhiteboardInput] = useState('')
-    const [whiteboardId, setWhiteboardId] = useState<undefined | string>(undefined)
+  const [whiteboardInput, setWhiteboardInput] = useState("");
+  const [whiteboardId, setWhiteboardId] = useState<undefined | string>(
+    undefined
+  );
+
+  function handleSubmit(e: KeyboardEvent | MouseEvent) {
+      if (e.type === 'click' || (e.type === 'keypress' && 'code' in e && e.code === 'Enter')) {
+            if (whiteboardInput.length === 0) {
+                toaster.danger("Whiteboard ID cannot be empty");
+                return;
+            }
+            setWhiteboardId(whiteboardInput)
+      }      
+  }
 
   return (
     <div>
@@ -17,27 +29,47 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <Pane display='flex' alignItems='center' justifyContent='center' flexDirection='column'>
-            <Pane flex={1}>
-                <Heading size={900}>Serverless Whiteboard</Heading>
-                <Heading size={500}>Includes auto-saving and real-time collaboration</Heading>
-            </Pane>
+        <Pane
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          flexDirection="column"
+        >
+          <Pane flex={1}>
+            <Heading size={900}>Serverless Whiteboard</Heading>
+            <Heading size={500}>
+              Includes auto-saving and real-time collaboration
+            </Heading>
+          </Pane>
 
-            <Pane flex={1}>
-                {
-                    whiteboardId
-                        ? <Canvas whiteboardId={whiteboardId} />
-                        : <>
-                            <TextInput onChange={(e: Event) => setWhiteboardInput((e.target as HTMLInputElement).value)} value={whiteboardInput} placeholder="Whiteboard ID" />
-                            <Button onClick={() => {setWhiteboardId(whiteboardInput)}}>Submit</Button>
-                        </>
-                }
-            </Pane>
+          <Pane flex={1}>
+            {
+                whiteboardId
+                ? <Canvas whiteboardId={whiteboardId} />
+                :
+                <Pane marginTop={majorScale(2)}>
+                    <TextInput
+                        onChange={(e: Event) => {
+                            setWhiteboardInput((e.target as HTMLInputElement).value)
+                        }}
+                        onKeyPress={handleSubmit}
+                        value={whiteboardInput}
+                        placeholder="Whiteboard ID"
+                    />
+                    <Button
+                        appearance="primary"
+                        intent="success"
+                        onClick={handleSubmit}
+                    >
+                        Submit
+                    </Button>
+                </Pane>
+            }
+          </Pane>
         </Pane>
-
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

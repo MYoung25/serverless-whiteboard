@@ -1,30 +1,30 @@
 import { Router } from 'worktop'
 import { start } from 'worktop/cfw'
-import * as Counters from './routes'
 import { Context } from './types'
 import { reply } from 'worktop/response'
 import { Durable } from 'worktop/cfw.durable'
 
 export * from './durableObject'
+export * from './whiteboard'
 
 const xAPI = new Router<Context>()
 
-xAPI.add('GET', '/hello/ws', async (request: Request, context) => {
+xAPI.add('GET', '/whiteboard/:id/ws', async (request: Request, context) => {
     if (!context.bindings) return reply(500)
+    try {
+        const { id } = context.params
+        const url = new URL(request.url)
+    
+        url.pathname = url.pathname.replace(`/whiteboard/${id}`, '')
+    
+        let namespace = context.bindings.WHITEBOARDDO as Durable.Namespace
+        let objectId = namespace.idFromName(id);
+        let obj = namespace.get(objectId);
 
-    const url = new URL(request.url)
-
-    url.pathname = url.pathname.replace('/hello', '')
-
-    let namespace = context.bindings.COUNTERDO as Durable.Namespace
-    let id = namespace.idFromName("A");
-    let obj = namespace.get(id);
-
-    return obj.fetch(url.toString(), request)
+        return obj.fetch(url.toString(), request)
+    } catch (e) {
+        return reply(500)
+    }
 })
-xAPI.add('POST', '/counter', Counters.create)
-xAPI.add('GET', '/counter/:uid', Counters.show)
-xAPI.add('PUT', '/counter/:uid', Counters.update)
-xAPI.add('DELETE', '/counter/:uid', Counters.destroy)
 
 export default start(xAPI.run)

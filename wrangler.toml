@@ -9,9 +9,14 @@ kv_namespaces = [
 
 [durable_objects]
 bindings = [
-    { name = "COUNTERDO", class_name = "Counter" }
+    { name = "COUNTERDO", class_name = "Counter" },
+    { name = "WHITEBOARDDO", class_name = "Whiteboard" }
 ]
 
 [[migrations]]
 tag = "v1.0.0"
 new_classes = ["Counter"]
+
+[[migrations]]
+tag = "v1.0.1"
+new_classes = ["Whiteboard"]

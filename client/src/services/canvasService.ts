@@ -1,5 +1,19 @@
+import { WebsocketService } from "./WebSocketService"
+
+interface drawObject {
+    moveTo: {
+        x: number, y: number
+    }
+    lineTo: {
+        x: number, y: number
+    }
+    strokeStyle: string
+    lineWidth: number
+}
 
 export class CanvasService {
+    websocketService: WebsocketService
+
     canvas?: HTMLCanvasElement
     ctx?: CanvasRenderingContext2D | null
     w = 375
@@ -12,9 +26,12 @@ export class CanvasService {
     currY = 0
     dot_flag = false
     
-    x = 'black'
-    y = 2
+    color = 'black'
+    lineWidth = 2
 
+    constructor (websocketService: WebsocketService) {
+        this.websocketService = websocketService
+    }
 
     init(canvas?: HTMLCanvasElement) {
         if (!canvas) return
@@ -38,6 +55,42 @@ export class CanvasService {
         this.canvas.addEventListener("mouseout", function (e) {
             findxy('out', e)
         }, false);
+
+        this.websocketService.registerListeners([
+            {
+                eventName: 'message',
+                handler: (message: MessageEvent) => {
+                    try {
+                        const event = JSON.parse(message.data)
+                        console.log(event);
+                        if (event.type === 'whiteboard/LOADED') {
+                            if (event.data.length === 0 && this.ctx) {
+                                this.ctx.clearRect(0, 0, this.w, this.h)
+                                return
+                            }
+
+                            event.data.forEach((object: drawObject) => {
+                                this.draw(object, true)
+                            })
+                        }
+                    } catch (e) {
+                        console.error(e)
+                    }
+                }
+            },
+            {
+                eventName: 'open',
+                handler: () => {
+                    this.websocketService.emit({ type: 'load' })
+                }
+            },
+            {
+                eventName: 'close',
+                handler: () => {
+                    console.log('close')
+                }
+            }
+        ])
     }
 
     findxy(res: string, e: MouseEvent) {
@@ -52,7 +105,7 @@ export class CanvasService {
             this.dot_flag = true;
             if (this.dot_flag) {
                 this.ctx.beginPath();
-                this.ctx.fillStyle = this.x;
+                this.ctx.fillStyle = this.color;
                 this.ctx.fillRect(this.currX, this.currY, 2, 2);
                 this.ctx.closePath();
                 this.dot_flag = false;
@@ -67,61 +120,75 @@ export class CanvasService {
                 this.prevY = this.currY;
                 this.currX = e.clientX - this.canvas.getBoundingClientRect().left;
                 this.currY = e.clientY - this.canvas.getBoundingClientRect().top;
-                this.draw();
+
+                const drawObject = {
+                    moveTo: {
+                        x: this.prevX, y: this.prevY
+                    },
+                    lineTo: {
+                        x: this.currX, y: this.currY
+                    },
+                    strokeStyle: this.color,
+                    lineWidth: this.lineWidth
+                }
+
+                this.draw(drawObject);
             }
         }
     }
 
-    draw() {
-        if (!this.ctx) return
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.prevX, this.prevY);
-        this.ctx.lineTo(this.currX, this.currY);
-        this.ctx.strokeStyle = this.x;
-        this.ctx.lineWidth = this.y;
-        this.ctx.stroke();
-        this.ctx.closePath();
+    draw(object: drawObject, fromServer = false) {
+        if (!this.ctx || !this.canvas) return
+        try {
+            const path = new Path2D()
+            path.moveTo(object.moveTo.x, object.moveTo.y);
+            path.lineTo(object.lineTo.x, object.lineTo.y);
+            path.closePath();
+            this.ctx.strokeStyle = object.strokeStyle;
+            this.ctx.lineWidth = object.lineWidth;
+            this.ctx.stroke(path);
+            
+            
+            if (!fromServer) {
+                this.websocketService.emit({ type: 'addPath', data: object })
+            }
+        } catch (e) {
+            console.error(e)
+        }
     }
 
-    color(color: string) {
+    setColor(color: string) {
         switch (color) {
             case "green":
-                this.x = "green";
+                this.color = "green";
                 break;
             case "blue":
-                this.x = "blue";
+                this.color = "blue";
                 break;
             case "red":
-                this.x = "red";
+                this.color = "red";
                 break;
             case "yellow":
-                this.x = "yellow";
+                this.color = "yellow";
                 break;
             case "orange":
-                this.x = "orange";
+                this.color = "orange";
                 break;
             case "black":
-                this.x = "black";
+                this.color = "black";
                 break;
             case "white":
-                this.x = "white";
+                this.color = "white";
                 break;
         }
-        if (this.x == "white") this.y = 14;
-        else this.y = 2;
+        if (this.color == "white") this.lineWidth = 14;
+        else this.lineWidth = 2;
 
     }
 
 }
 
-// function erase() {
-//     var m = confirm("Want to clear");
-//     if (m) {
-//         ctx.clearRect(0, 0, w, h);
-//         document.getElementById("canvasimg").style.display = "none";
-//     }
-// }
-
+// this can be used to save an image to R2...
 // function save() {
 //     document.getElementById("canvasimg").style.border = "2px solid";
 //     var dataURL = canvas.toDataURL();
