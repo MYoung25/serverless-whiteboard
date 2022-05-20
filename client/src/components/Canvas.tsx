@@ -19,12 +19,14 @@ export function Canvas({ whiteboardId }: { whiteboardId: string }) {
     const canvasRef = useRef(null);
 
     useEffect(() => {
-        CanvasService.init(canvasRef.current);
-        WebsocketService.init(whiteboardId);
+        if (canvasRef.current) {
+            CanvasService.init(canvasRef.current);
+            WebsocketService.init(whiteboardId);
+        }
     }, [canvasRef.current, whiteboardId])
 
     return (
-        <>
+        <Pane>
             <Pane marginBottom={majorScale(3)}>
                 <Heading align='center' marginTop={majorScale(3)} marginBottom={majorScale(1)}>Color Palette</Heading>
                 <Pane display={'flex'}>
@@ -50,6 +52,6 @@ export function Canvas({ whiteboardId }: { whiteboardId: string }) {
                 />
             </Pane>
             <ConnectionIndicator whiteboardId={whiteboardId} />
-        </>
+        </Pane>
     );
 }
