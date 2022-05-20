@@ -20,6 +20,7 @@ export class WebsocketService {
         this.ws = new ReconnectingWebsocket(`${WEBSOCKET_URL}/whiteboard/${id}/ws`)
 
         this.ws.addEventListener('open', () => {
+            this.emit({ type: 'load' })
             this.registerListeners(this.listeners)
         })
     }
