@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { Pane, Heading, TextInput, Button, majorScale, toaster } from "evergreen-ui";
 import { Canvas } from "../components/Canvas";
+import GitHubButton from "react-github-btn"
 
 const Home: NextPage = () => {
   const [whiteboardInput, setWhiteboardInput] = useState("");
@@ -29,6 +30,13 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
+          <Pane
+            position="fixed"
+            bottom={majorScale(1)}
+            right={majorScale(1)}
+          >
+            <GitHubButton href="https://github.com/MYoung25/serverless-whiteboard" aria-label="Star MYoung25/serverless-whiteboard on GitHub">Serverless Whiteboard</GitHubButton>
+          </Pane>
         <Pane
           display="flex"
           alignItems="center"
@@ -64,6 +72,29 @@ const Home: NextPage = () => {
                     >
                         Submit
                     </Button>
+                    <Pane
+                        marginTop={majorScale(4)}
+                        display='grid'
+                        alignItems='center'
+                        height={majorScale(6)}
+                        backgroundImage='url(/pages.svg)'
+                        backgroundSize='contain'
+                        backgroundRepeat='no-repeat'
+                        backgroundPosition='right'
+                    >
+                        <Heading>Hosted On</Heading>
+                    </Pane>
+                    <Pane
+                        display='grid'
+                        alignItems='center'
+                        height={majorScale(6)}
+                        backgroundImage='url(/workers.svg)'
+                        backgroundSize='contain'
+                        backgroundRepeat='no-repeat'
+                        backgroundPosition='right'
+                    >
+                        <Heading>Built With</Heading>
+                    </Pane>
                 </Pane>
             }
           </Pane>

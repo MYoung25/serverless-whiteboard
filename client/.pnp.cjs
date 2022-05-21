@@ -43,6 +43,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["next", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:12.1.6"],\
             ["react", "npm:18.1.0"],\
             ["react-dom", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:18.1.0"],\
+            ["react-github-btn", "npm:1.3.0"],\
             ["react-is", "npm:18.1.0"],\
             ["reconnecting-websocket", "npm:4.4.0"],\
             ["typescript", "patch:typescript@npm%3A4.6.4#~builtin<compat/typescript>::version=4.6.4&hash=bda367"]\
@@ -869,6 +870,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["next", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:12.1.6"],\
             ["react", "npm:18.1.0"],\
             ["react-dom", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:18.1.0"],\
+            ["react-github-btn", "npm:1.3.0"],\
             ["react-is", "npm:18.1.0"],\
             ["reconnecting-websocket", "npm:4.4.0"],\
             ["typescript", "patch:typescript@npm%3A4.6.4#~builtin<compat/typescript>::version=4.6.4&hash=bda367"]\
@@ -1839,6 +1841,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["get-symbol-description", "npm:1.0.0"],\
             ["call-bind", "npm:1.0.2"],\
             ["get-intrinsic", "npm:1.1.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["github-buttons", [\
+        ["npm:2.21.1", {\
+          "packageLocation": "./.yarn/cache/github-buttons-npm-2.21.1-557eb20da1-5c90dc19a9.zip/node_modules/github-buttons/",\
+          "packageDependencies": [\
+            ["github-buttons", "npm:2.21.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -2902,6 +2913,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/react-fast-compare-npm-3.2.0-fbfa6627d9-8ef272c825.zip/node_modules/react-fast-compare/",\
           "packageDependencies": [\
             ["react-fast-compare", "npm:3.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["react-github-btn", [\
+        ["npm:1.3.0", {\
+          "packageLocation": "./.yarn/cache/react-github-btn-npm-1.3.0-460aafad3f-8ad3193d7f.zip/node_modules/react-github-btn/",\
+          "packageDependencies": [\
+            ["react-github-btn", "npm:1.3.0"],\
+            ["github-buttons", "npm:2.21.1"]\
           ],\
           "linkType": "HARD"\
         }]\
